@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Розклад салону</title>
+</head>
+<body>
+    <h1>Вільні слоти нашого салону</h1>
+
+    <ul>
+        {% for s in schedules %}
+            <li>{{ s.date|date:"j E Y" }} - {{ s.time|time:"H:i" }} (Майстер: {{ s.master.name}})</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>

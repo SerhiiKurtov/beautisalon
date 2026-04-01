@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from crm.views import schedule_list
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('schedule/', schedule_list, name='schedule_list'),
 ]
