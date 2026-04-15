@@ -3,6 +3,10 @@ from django.shortcuts import render
 from crm.models import Schedule
 from crm.models import Service
 from crm.models import MasterService
+from crm.models import SiteSettings
+from crm.models import Advantage
+from crm.models import ContactDetail
+from crm.models import Gallery
 
 # Create your views here.
 def schedule_list(request, service_id, master_id) :
@@ -22,4 +26,16 @@ def masterservice_list(request, service_id) :
     return render(request, 'crm/masterservice.html', {
         'masters' : masters,
         'service' : service
+    })
+
+def home(request) :
+    settings = SiteSettings.objects.first()
+    advantages = Advantage.objects.all().order_by('order')
+    contacts = ContactDetail.objects.all().order_by('order')
+    gallery = Gallery.objects.all().order_by('-date')
+    return render(request, 'crm/index.html', {
+        'settings' : settings,
+        'advantages' : advantages,
+        'contacts' : contacts,
+        'gallery' : gallery
     })

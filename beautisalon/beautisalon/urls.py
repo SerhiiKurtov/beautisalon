@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from crm.views import schedule_list, service_list, masterservice_list
+from crm.views import schedule_list, service_list, masterservice_list, home
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,4 +26,6 @@ urlpatterns = [
     path('service/', service_list, name='service_list'),
     path('service/<int:service_id>/masters/', masterservice_list, name='masterservice_list'),
     path('schedule/<int:service_id>/<int:master_id>/', schedule_list, name='schedule_list'),
-]
+    path('', home, name='home')
+] 
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

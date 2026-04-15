@@ -73,3 +73,39 @@ class Booking(models.Model) :
 
     def __str__(self) :
         return f"{self.client} - {self.schedule}"
+    
+class SiteSettings(models.Model) :
+    site_name = models.CharField(max_length=100, default='Irenka Nails')
+    bg_color = models.CharField(max_length=7, default='#E6E6FA')
+    container_color = models.CharField(max_length=7, default='#FFFFFF')
+    hero_title = models.CharField(max_length=300, default='Твій ідеальний манікюр')
+    hero_subtitle = models.TextField(blank=True)
+    emblem = models.ImageField(upload_to='logos', null=True, blank=True)
+    
+    def __str__(self):
+        return "Налаштування сайту"
+    
+class Advantage(models.Model) :
+    title = models.CharField(max_length=100, unique=True, default='Якість')
+    description = models.TextField(max_length=500, default='Працюємо на найкращих та перевірених матеріалах')
+    order = models.PositiveIntegerField()
+
+    def __str__(self) :
+        return self.title
+    
+class ContactDetail(models.Model) :
+    name = models.CharField(max_length=50, blank=True)
+    badge = models.CharField(max_length=100)
+    contact = models.CharField(max_length=200, blank=True)
+    order = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.name or self.contact
+    
+class Gallery(models.Model) :
+    image = models.ImageField(upload_to='gallery', null=True, blank=True)
+    name = models.CharField(max_length=200, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name or "Фото роботи"

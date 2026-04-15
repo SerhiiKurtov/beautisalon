@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Great+Vibes&family=Pacifico&display=swap" rel="stylesheet">
+        <style>
+            body {
+                background-color: {{ settings.bg_color }};
+            }
+
+            .main-title {
+                font-family: 'Great Vibes', serif;
+                font-size: 48px;
+                font-weight: 500;
+                letter-spacing: 3px;
+                margin-bottom: 10px;
+                color: rgb(52, 47, 57);
+            }
+
+            .gallery-img {
+                width: 100%;
+                aspect-ratio: 1 / 1;
+                object-fit: cover;
+                border-radius: 4px;
+                transition: transform 0.2s;
+                display: block;
+            }
+
+            .gallery-img:hover {
+                transform: scale(1.02);
+            }
+
+            .dropdown-menu {
+                position: absolute !important;
+            }
+
+            @media (max-width: 768px) {
+                .dropdown-menu {
+                    right: 0;
+                    left: auto;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+            <div class="container">
+                <a class="navbar-brand px-2" href="{% url 'home' %}">{{ settings.site_name }}</a>
+                <div class="navbar-nav flex-row ms-auto align-items-center">
+                    <div class="nav-item dropdown px-2">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-lines-fill me-1"></i> Контакти
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow px-2" aria-labelledby="navbarDropdown" data-bs-display="static">
+                            {% for contact in contacts %}
+                                <li>
+                                    <a class="dropdown-item py-2" href="{{ contact.contact }}">
+                                        <i class="bi {{ contact.badge }} me-2 text-primary"></i> {{ contact.name }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <a class="nav-link px-2" href="{% url 'home' %}">Головна</a>
+                    <a class="nav-link px-2" href="{% url 'service_list' %}">Послуги</a>
+                </div>
+            </div>
+        </nav>
+        <div class="container text-center py-5 rounded-3 mb-4 shadow-lg" style="background-color: {{ settings.container_color }};">
+            <div class="mb-4">
+                {% if settings.emblem %}
+                    <img src="{{ settings.emblem.url }}" alt="Logo" style="max-height: 150px;">
+                {% else %}
+                    <h1>{{ settings.site_name }}</h1>
+                {% endif %}
+            </div>
+            <h1 class="main-title">{{ settings.site_name }}</h1>
+
+            <p class="lead">{{ settings.hero_title }}</p>
+            <a href="{% url 'service_list' %}"
+            class="btn btn-primary btn-lg">
+            Записатися онлайн</a>
+        
+            <div class="row mt-5 text-center">
+                {% for adv in advantages %}
+                    <div class="col-md-4">
+                        <h4>{{ adv.title }}</h4>
+                        <p>{{ adv.description }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+            <section class="py-5">
+                <div class="container my-5">
+                    <h2 class="text-center mb-4">Наші роботи</h2>
+                    
+                    <div class="row row-cols-3 row-cols-md-4 g-2">
+                        {% for item in gallery %}
+                        <div class="col">
+                            <a href="{{ item.image.url }}" class="glightbox" data-gallery="gallery1">
+                                <img src="{{ item.image.url }}" class="gallery-img" alt="{{ item.name }}">
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+        </div>
+        <footer class="py-3 mt-auto bg-dark navbar-dark">
+            <div class="container d-flex justify-content-between align-items-center">
+                <a  class="navbar-brand text-white-50 px-2">місто Київ</a>
+                <p class="navbar-brand text-white-50 mb-0" href="{% url 'home' %}">
+                    &copy; {% now "Y" %} {{ settings.site_name }}
+                </p>
+                <a class="nav-link px-2 text-white-50" target="_blank" href="https://github.com/SerhiiKurtov">Developed by Serhii Kurtov</a>
+            </div>
+        </footer>
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript">
+        const lightbox = GLightbox ({
+            selector: '.glightbox'
+        });
+    </script>
+    </body>
+</html>
