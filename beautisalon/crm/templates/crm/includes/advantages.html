@@ -1,0 +1,12 @@
+<section id="advantages" class="py-5">
+    <div class="container text-center py-5 rounded-3 mb-4 shadow-lg" style="background-color: {{ settings.container_color }};">
+        <div class="row mt-5 text-center">
+            {% for adv in advantages %}
+                <div class="col-md-4">
+                    <h4>{{ adv.title }}</h4>
+                    <p>{{ adv.description }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

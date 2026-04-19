@@ -18,12 +18,12 @@ def schedule_list(request, service_id, master_id) :
 
 def service_list(request) :
     services = Service.objects.all()
-    return render(request, 'crm/service.html', {'services' : services})
+    return render(request, 'crm/includes/services.html', {'services' : services})
 
 def masterservice_list(request, service_id) :
     masters = MasterService.objects.filter(service_id=service_id)
     service = Service.objects.get(id=service_id)
-    return render(request, 'crm/masterservice.html', {
+    return render(request, 'crm/includes/masterservice.html', {
         'masters' : masters,
         'service' : service
     })
@@ -33,9 +33,11 @@ def home(request) :
     advantages = Advantage.objects.all().order_by('order')
     contacts = ContactDetail.objects.all().order_by('order')
     gallery = Gallery.objects.all().order_by('-date')
+    services = Service.objects.all()
     return render(request, 'crm/index.html', {
         'settings' : settings,
         'advantages' : advantages,
         'contacts' : contacts,
-        'gallery' : gallery
+        'gallery' : gallery,
+        'services' : services 
     })

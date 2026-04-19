@@ -1,0 +1,17 @@
+<section id="home" class="py-5">
+    <div class="container text-center py-5 rounded-3 mb-4 shadow-lg" style="background-color: {{ settings.container_color }};">
+        <div class="mb-4">
+            {% if settings.emblem %}
+                <img src="{{ settings.emblem.url }}" alt="Logo" style="max-height: 150px;">
+            {% else %}
+                <h1>{{ settings.site_name }}</h1>
+            {% endif %}
+        </div>
+        <h1 class="main-title">{{ settings.site_name }}</h1>
+
+        <p class="lead">{{ settings.hero_title }}</p>
+        <a href="{% url 'service_list' %}"
+        class="btn btn-primary btn-lg">
+        Записатися онлайн</a>
+    </div>
+</section>

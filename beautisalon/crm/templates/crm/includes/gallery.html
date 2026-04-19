@@ -1,0 +1,15 @@
+<section id="gallery" class="py-5">
+    <div class="container my-5" >
+        <h2 class="text-center mb-4">Наші роботи</h2>
+                    
+        <div class="row row-cols-3 row-cols-md-4 g-2">
+            {% for item in gallery %}
+            <div class="col">
+                <a href="{{ item.image.url }}" class="glightbox" data-gallery="gallery1">
+                    <img src="{{ item.image.url }}" class="gallery-img" alt="{{ item.name }}">
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

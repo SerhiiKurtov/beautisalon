@@ -1,0 +1,31 @@
+<section id="masterservice" class="py-5">
+    <div class="container mt=5">
+        <h1>Послуги майстрів</h1>
+
+        <table class="table table-striped table-hover mt-4">
+            <thead>
+                <tr>
+                    <th>Mайстер</th>
+                    <th>Процедура</th>
+                    <th>Ціна</th>
+                    <th>Дія</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ms in masters %}
+                <tr>
+                    <td>{{ ms.master.name }}</td>
+                    <td>{{ ms.service }}</td>
+                    <td>{{ ms.price}} грн</td>
+                    <td>
+                        <a href="{% url 'schedule_list' service_id=ms.service.id master_id=ms.master.id %}" 
+                        class="btn btn-primary btn-sm">
+                        Вибрати час
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
