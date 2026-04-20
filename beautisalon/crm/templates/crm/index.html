@@ -6,4 +6,8 @@
     {% include 'crm/includes/services.html' %}
     {% include 'crm/includes/schedule.html' %}
     {% include 'crm/includes/gallery.html' %}
+
+    {% load static %}
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+    <script src="{% static 'crm/js/calendar_init.js' %}"></script>
 {% endblock %}

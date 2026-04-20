@@ -1,30 +1,11 @@
 <section id="schedules" class="py-5">
     <div class="container mt=5">
-        <h1 class="main-title text-center">Вільні слоти нашого салону</h1>
-
-        <h3>Запис до майстра на послугу</h3>
-        <table class="table table-striped table-hover mt-4">
-            <thead>
-                <tr>
-                    <th>Дата</th>
-                    <th>Час</th>
-                    <th>Майстер</th>
-                    <th>Дія</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for s in schedules %}
-                <tr>
-                    <td>{{ s.date|date:"j E Y" }}</td>
-                    <td>{{ s.time|time:"H:i" }}</td>
-                    <td>{{ s.master.name }}</td>
-                    <td>
-                        <a href="#" class="btn btn-success btn-sm">
-                        Записатися</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+       <h1 class="main-title text-center">Вільні слоти нашого салону</h1> 
+       {% for item in master_list %}
+            <div class="master-calendar-container mb-5">
+                <h3>Графік майстра: {{ item.master.name }}</h3>
+                <div id="calendar-{{ item.master.id }}"></div>
+            </div>
+        {% endfor %}
     </div>
 </section>

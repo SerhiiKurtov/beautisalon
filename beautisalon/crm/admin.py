@@ -1,4 +1,5 @@
-from django.contrib import admin
+import calendar
+from datetime import datetime
 
 # Register your models here.
 from django.contrib import admin
@@ -12,10 +13,11 @@ from .models import SiteSettings
 from .models import Advantage
 from .models import ContactDetail
 from .models import Gallery
+from .forms import ScheduleGenerationForm
+from django.shortcuts import render, HttpResponseRedirect
 
 admin.site.register(Service)
 admin.site.register(Client)
-admin.site.register(Master)
 admin.site.register(MasterService)
 admin.site.register(Booking)
 admin.site.register(SiteSettings)
@@ -29,3 +31,40 @@ class ScheduleAdmin(admin.ModelAdmin):
     search_fields = ('master__name',)
 
 admin.site.register(Schedule, ScheduleAdmin)
+
+def generate_schedule(modeladmin, request, queryset) :
+    if 'apply' in request.POST :
+        form = ScheduleGenerationForm(request.POST)
+        if form.is_valid() :
+            year = form.cleaned_data['year']
+            month = form.cleaned_data['month']
+            num_day = calendar.monthrange(year, month)[1]
+            weekends_list = form.cleaned_data['weekends'].split()
+            hours_list = form.cleaned_data['hours'].split()
+
+            for master in queryset :
+                for day in range(1, num_day + 1) :
+                    if str(day) in weekends_list:
+                        continue
+
+                    current_date = f"{year}-{month:02}-{day:02}"
+
+                    for h in hours_list :
+                        Schedule.objects.get_or_create(master=master, date=current_date, time=h)
+
+            modeladmin.message_user(request, "Графік створено")
+            return HttpResponseRedirect(request.get_full_path())
+    else :
+        form = ScheduleGenerationForm()
+    
+    return render(request, 'admin/generate_schedule.html', {
+        'queryset': queryset,
+        'form': form
+    })
+
+generate_schedule.short_description = "Згенерувати графік на місяць"
+
+class MasterAdmin(admin.ModelAdmin) :
+    actions = [generate_schedule]
+
+admin.site.register(Master, MasterAdmin)
