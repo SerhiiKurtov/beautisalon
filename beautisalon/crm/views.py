@@ -4,6 +4,7 @@ from django.http import JsonResponse
 
 from django.utils import timezone
 from datetime import timedelta
+from datetime import datetime
 
 from crm.models import Schedule
 from crm.models import Service
@@ -75,3 +76,39 @@ def load_schedule(request, master_id) :
         }
         events.append(event_data)
     return JsonResponse(events, safe=False)
+
+def schedule_date(request) :
+    events = []
+    schedules = Schedule.objects.all()
+    for item in schedules :
+        combined_dt = datetime.combine(item.date, item.time)
+        start_datetime = combined_dt.isoformat()
+        if item.is_available == True :
+            events.append({
+                "title" : f"Вільний час",
+                "start" : start_datetime,
+                "color" : "green",
+                "extendedProps" : {
+                    "service_title": "-",
+                    "master_name": item.master.name
+                }
+            })
+        else :
+            booking = item.booking_set.first()
+            client_name = booking.client.name if booking else "Зайнято"
+            service_title = booking.service.service.title if booking else "-"
+            events.append({
+                "title" : f"{client_name}",
+                "start" : start_datetime,
+                "color" : "red",
+                "extendedProps": {
+                    "client_full_name": client_name,
+                    "service_title": service_title,
+                    "master_name": item.master.name
+                }
+            })
+
+    return JsonResponse(events, safe=False)
+
+def calendar_view(request) :
+    return render(request, 'admin/calendar.html')

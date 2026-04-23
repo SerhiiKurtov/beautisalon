@@ -25,10 +25,22 @@ admin.site.register(Advantage)
 admin.site.register(ContactDetail)
 admin.site.register(Gallery)
 
-class ScheduleAdmin(admin.ModelAdmin):
-    list_display = ('master', 'date', 'time', 'is_available')
+class ScheduleAdmin(admin.ModelAdmin) :
+    change_list_template = 'admin/crm/schedule/change_list.html'
+    list_display = ('master', 'date', 'time', 'display_client', 'is_available')
     list_filter = ('master', 'date', 'is_available')
     search_fields = ('master__name',)
+
+    def display_client(self, obj) :
+        booking = obj.booking_set.first()
+        if booking :
+            client = booking.client.name
+            service = booking.service.service.title
+            return f"{client} ({service})"
+        else :
+            return "-"
+        
+    display_client.short_description = 'Клієнт'
 
 admin.site.register(Schedule, ScheduleAdmin)
 

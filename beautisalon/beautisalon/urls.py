@@ -22,12 +22,14 @@ from django.conf.urls.static import static
 from crm import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('', home, name='home'),
     path('schedule/', schedule_list, name='schedule_list'),
     path('service/', service_list, name='service_list'),
     path('service/<int:service_id>/masters/', masterservice_list, name='masterservice_list'),
     path('schedule/<int:service_id>/<int:master_id>/', schedule_list, name='schedule_list'),
-    path('', home, name='home'),
-    path('api/load_schedule/<int:master_id>/', views.load_schedule, name='load_schedule')
+    path('calendar/', views.calendar_view, name='calendar_view'),
+    path('api/calendar-data/', views.schedule_date, name='schedule_data'),
+    path('api/load_schedule/<int:master_id>/', views.load_schedule, name='load_schedule'),
+    path('admin/', admin.site.urls),
 ] 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

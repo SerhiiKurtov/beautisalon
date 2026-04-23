@@ -1,0 +1,105 @@
+{% extends "admin/base_site.html" %}
+
+{% block extrahead %}
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css" rel="stylesheet">
+
+    <style>
+        .fc-timegrid-axis,
+        .fc-timegrid-slot-label,
+        .fc-timegrid-axis-frame,
+        .fc-col-header-cell.fc-timegrid-axis,
+        .fc-timegrid-slots td:first-child {
+            display: none !important;
+        }
+
+        .fc-timegrid-slots table, 
+        .fc-timegrid-cols table,
+        .fc-col-header table,
+        .fc-timegrid-col-frame {
+            margin-left: 0 !important;
+            width: 100% !important;
+        }
+
+        .fc-timegrid-slot {
+            background-color: #ffffff !important;
+            border-bottom: none !important;
+        }
+
+        .fc-timegrid-slot-minor {
+            background-color: #f9f9f9 !important;
+            border-top: none !important;
+        }
+
+        .fc-col-header-cell {
+            background-color: #f1f1f1 !important;
+            border-color: #ddd !important;
+        }
+
+        .fc-theme-standard td, .fc-theme-standard th {
+            border-color: #eee !important;
+        }
+
+        .fc-v-event {
+            border: none !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 4px !important;
+        }
+
+        .fc-event-main {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            padding: 2px 8px !important;
+            font-size: 13px !important;
+            white-space: nowrap !important;
+        }
+
+        .fc-event-time {
+            font-weight: bold !important;
+            margin-right: 10px !important;
+            flex-shrink: 0;
+        }
+
+        .fc-event-title {
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div id="calendar" style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd;"></div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'timeGridWeek',
+            contentHeight: 'auto',
+            expandRows: true,
+            slotDuration: '00:20:00',
+            slotMinTime: '09:00:00',
+            slotMaxTime: '17:00:00',
+            allDaySlot: false,
+            locale: 'uk',
+            events: '/api/calendar-data/',
+            
+            eventTimeFormat: {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            },
+            
+            dayHeaderFormat: { weekday: 'short', day: 'numeric', month: 'short' },
+            
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: ''
+            },
+        });
+        calendar.render();
+      });
+    </script>
+{% endblock %}
