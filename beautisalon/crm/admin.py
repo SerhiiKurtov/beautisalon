@@ -1,5 +1,7 @@
 import calendar
 from datetime import datetime
+from django.db import models
+from django.forms import TextInput
 
 # Register your models here.
 from django.contrib import admin
@@ -20,7 +22,6 @@ admin.site.register(Service)
 admin.site.register(Client)
 admin.site.register(MasterService)
 admin.site.register(Booking)
-admin.site.register(SiteSettings)
 admin.site.register(Advantage)
 admin.site.register(ContactDetail)
 admin.site.register(Gallery)
@@ -80,3 +81,12 @@ class MasterAdmin(admin.ModelAdmin) :
     actions = [generate_schedule]
 
 admin.site.register(Master, MasterAdmin)
+
+class Settings(admin.ModelAdmin) :
+    def formfield_for_dbfield(self, db_field, **kwargs) :
+        if db_field.name in ['bg_color', 'container_color'] :
+            kwargs['widget'] = TextInput(attrs={'type': 'color'})
+
+        return super().formfield_for_dbfield(db_field, **kwargs)
+
+admin.site.register(SiteSettings, Settings)

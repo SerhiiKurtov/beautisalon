@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Service(models.Model) :
-    title = models.CharField(max_length=100)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    title = models.CharField(max_length=100, verbose_name="Назва послуги")
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Ціна")
 
     class Meta:
         verbose_name = "Послуги"
@@ -14,8 +14,8 @@ class Service(models.Model) :
         return f"{self.title} ({self.price})"
 
 class Client(models.Model) :
-    name = models.CharField(max_length=100)
-    phone = models.CharField(max_length=13)
+    name = models.CharField(max_length=100, verbose_name="Ім'я та призвище")
+    phone = models.CharField(max_length=13, verbose_name="Номер телефону")
 
     class Meta:
         verbose_name = "Клієнти"
@@ -25,9 +25,9 @@ class Client(models.Model) :
         return self.name
     
 class Master(models.Model) :
-    name = models.CharField(max_length=100)
-    specialization = models.CharField(max_length=100)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    name = models.CharField(max_length=100, verbose_name="Ім'я майстра")
+    specialization = models.CharField(max_length=100, verbose_name="Спеціальність")
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, verbose_name="Посада")
     is_active = models.BooleanField(default=True)
 
     class Meta:
@@ -38,9 +38,9 @@ class Master(models.Model) :
         return f"{self.name} ({self.specialization})"
     
 class MasterService(models.Model) :
-    master = models.ForeignKey(Master, on_delete=models.CASCADE)
-    service = models.ForeignKey(Service, on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    master = models.ForeignKey(Master, on_delete=models.CASCADE, verbose_name="Майстер")
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="Послуга")
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Нова ціна")
 
     class Meta:
         verbose_name = "Майстер-послуги"
@@ -50,10 +50,10 @@ class MasterService(models.Model) :
         return f"{self.master} ({self.service} - {self.price})"
 
 class Schedule(models.Model) :
-    date = models.DateField()
-    time = models.TimeField()
+    date = models.DateField(verbose_name="Дата")
+    time = models.TimeField(verbose_name="Час")
+    master = models.ForeignKey(Master, on_delete=models.CASCADE, verbose_name="Майстер")
     is_available = models.BooleanField(default=True)
-    master = models.ForeignKey(Master, on_delete=models.CASCADE)
 
     class Meta :
         unique_together = ('date', 'time', 'master')
@@ -71,12 +71,12 @@ class Booking(models.Model) :
         ('canceled', 'Скасовано'),
     ]
 
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    service = models.ForeignKey(MasterService, on_delete=models.CASCADE)
-    schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    notes = models.TextField(blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', verbose_name="Статус")
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name="Клієнт")
+    service = models.ForeignKey(MasterService, on_delete=models.CASCADE, verbose_name="Послуга")
+    schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE, verbose_name="Розклад")
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Загальна ціна")
+    notes = models.TextField(blank=True, verbose_name="Примітки")
 
     class Meta:
         verbose_name = "Бронювання"
@@ -97,12 +97,12 @@ class Booking(models.Model) :
         return f"{self.client} - {self.schedule}"
     
 class SiteSettings(models.Model) :
-    site_name = models.CharField(max_length=100, default='Irenka Nails')
-    bg_color = models.CharField(max_length=7, default='#E6E6FA')
-    container_color = models.CharField(max_length=7, default='#FFFFFF')
-    hero_title = models.CharField(max_length=300, default='Твій ідеальний манікюр')
-    hero_subtitle = models.TextField(blank=True)
-    emblem = models.ImageField(upload_to='logos', null=True, blank=True)
+    site_name = models.CharField(max_length=100, default='Irenka Nails', verbose_name="Назва сайту")
+    bg_color = models.CharField(max_length=7, default='#E6E6FA', verbose_name="Основний колір")
+    container_color = models.CharField(max_length=7, default='#FFFFFF', verbose_name="Колір контейнера")
+    hero_title = models.CharField(max_length=300, default='Твій ідеальний манікюр', verbose_name="Гасло сайту")
+    hero_subtitle = models.TextField(blank=True, verbose_name="Підзаголовок сайту")
+    emblem = models.ImageField(upload_to='logos', null=True, blank=True, verbose_name="Емблема")
 
     class Meta:
         verbose_name = "Налаштування сайту"
@@ -112,9 +112,9 @@ class SiteSettings(models.Model) :
         return "Налаштування сайту"
     
 class Advantage(models.Model) :
-    title = models.CharField(max_length=100, unique=True, default='Якість')
-    description = models.TextField(max_length=500, default='Працюємо на найкращих та перевірених матеріалах')
-    order = models.PositiveIntegerField()
+    title = models.CharField(max_length=100, unique=True, default='Якість', verbose_name="Заголовок")
+    description = models.TextField(max_length=500, default='Працюємо на найкращих та перевірених матеріалах', verbose_name="Опис")
+    order = models.PositiveIntegerField(verbose_name="Місце")
 
     class Meta:
         verbose_name = "Переваги"
@@ -124,10 +124,19 @@ class Advantage(models.Model) :
         return self.title
     
 class ContactDetail(models.Model) :
-    name = models.CharField(max_length=50, blank=True)
-    badge = models.CharField(max_length=100)
-    contact = models.CharField(max_length=200, blank=True)
-    order = models.PositiveIntegerField()
+    STATUS_CHOICES = [
+        ('bi bi-instagram text-danger', 'Instagram'),
+        ('bi bi-telegram text-info', 'Telegram'),
+        ('bi bi-telephone-fill text-success', 'Телефон'),
+        ('bi bi-chat-dots text-primary', 'Viber'),
+        ('bi bi-facebook', 'Facebook'),
+        ('bi bi-whatsapp text-success text-opacity-75', 'WhatsApp'),
+        ('bi bi-tiktok text-dark', 'TikTok'),
+    ]
+    name = models.CharField(max_length=50, blank=True, verbose_name="Назва")
+    badge = models.CharField(max_length=100, choices=STATUS_CHOICES, verbose_name="Значок")
+    contact = models.CharField(max_length=200, blank=True, verbose_name="Контакт(посилання)")
+    order = models.PositiveIntegerField(verbose_name="Місце")
 
     class Meta:
         verbose_name = "Контактна інформація"
@@ -137,8 +146,8 @@ class ContactDetail(models.Model) :
         return self.name or self.contact
     
 class Gallery(models.Model) :
-    image = models.ImageField(upload_to='gallery', null=True, blank=True)
-    name = models.CharField(max_length=200, blank=True)
+    image = models.ImageField(upload_to='gallery', null=True, blank=True, verbose_name="Фото")
+    name = models.CharField(max_length=200, blank=True, verbose_name="Назва(опис)")
     date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
