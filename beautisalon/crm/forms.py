@@ -1,4 +1,6 @@
 from django import forms
+from django.db import models
+from .models import Booking
 
 class ScheduleGenerationForm(forms.Form) :
     year = forms.IntegerField(label="Рік", initial=2026)
@@ -13,3 +15,15 @@ class ScheduleGenerationForm(forms.Form) :
         required=False,
         help_text="Наприклад: 5 6 12 13"
     )
+
+class BookingEditForm(forms.ModelForm) :
+    new_client_name = forms.CharField(required=False, label="Ім'я нового клієнта", max_length=100)
+    new_phone = forms.CharField(required=False, label="Номер телефону", max_length=13)  
+
+    class Meta:
+        model = Booking
+        fields = ['status', 'client', 'schedule', 'service', 'notes']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['client'].required = False

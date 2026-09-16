@@ -1,0 +1,34 @@
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <a href="?month={{ prev_month }}&year={{ prev_year }}" class="btn btn-outline-primary">&larr; Попередній</a>
+        
+        <div class="text-centeк">
+            <h2 class="mb-0 fw-bold">Календар</h2>
+            <div class="month-label">
+                {{ current_month_name }} {{ current_year }}
+            </div>
+        </div>
+
+        <a href="?month={{ next_month }}&year={{ next_year }}" class="btn btn-outline-primary">Наступний &rarr;</a>
+    </div>
+
+    <div class="calendar-grid">
+        <div class="day-header">Пн</div>
+        <div class="day-header">Вт</div>
+        <div class="day-header">Ср</div>
+        <div class="day-header">Чт</div>
+        <div class="day-header">Пт</div>
+        <div class="day-header">Сб</div>
+        <div class="day-header">Нд</div>
+
+        {% for i in range_offset %}
+            <div class="day-card empty"></div>
+        {% endfor %}
+
+        {% for day in calendar_days %}
+            <div class="day-card">
+                <span class="day-number">{{ day.number }}</span>
+            </div>
+        {% endfor %}
+    </div>        
+</div>

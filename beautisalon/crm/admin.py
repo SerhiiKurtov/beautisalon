@@ -27,7 +27,6 @@ admin.site.register(ContactDetail)
 admin.site.register(Gallery)
 
 class ScheduleAdmin(admin.ModelAdmin) :
-    change_list_template = 'admin/crm/schedule/change_list.html'
     list_display = ('master', 'date', 'time', 'display_client', 'is_available')
     list_filter = ('master', 'date', 'is_available')
     search_fields = ('master__name',)
